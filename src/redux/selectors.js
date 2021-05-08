@@ -15,11 +15,15 @@
      selectGlobal,
      globalState => globalState.currentWeather,
    );
- 
- const makeSelectLoading = () =>
+ const makeSelectWeather = () => 
+    createSelector(
+      selectGlobal, 
+      globalState => globalState.weather,
+    )
+ const makeSelectLoaded = () =>
    createSelector(
      selectGlobal,
-     globalState => globalState.loading,
+     globalState => globalState.loaded,
    );
  
  const makeSelectError = () =>
@@ -50,8 +54,9 @@
  export {
    selectGlobal,
    makeSelectCurrentWeather,
+   makeSelectWeather,
    makeSelectFiveDayData,
-   makeSelectLoading,
+   makeSelectLoaded,
    makeSelectError,
    makeSelect_Players,
    makeSelectLocation,

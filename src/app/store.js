@@ -26,7 +26,7 @@ const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
 
 export const store = createStore(rootReducer, composedEnhancer)
 
-console.log('Initial State: ', store.getState(global))
+console.log('Initial State: ', store.getState())
 
 
 

@@ -111,10 +111,7 @@ export const loadData = (weather, fiveDayData, _players) => {
     try {
       dispatch({type: GET_WEATHER, weather: weather});
       
-      return {
-        type: LOAD_DATA,
-        weather: weather,
-      };
+     
     } catch {
       dispatch({type: LOAD_DATA_ERROR});
     }
@@ -123,10 +120,8 @@ export const loadData = (weather, fiveDayData, _players) => {
      
      dispatch({type: FETCH_FIVE_DAY_DATA, fiveDayData});
      
-     return {
-      type: LOAD_DATA,
-      fiveDayData,
-    };
+   
+    
     } catch {
       dispatch({type: LOAD_DATA_ERROR});
     }
@@ -135,10 +130,7 @@ export const loadData = (weather, fiveDayData, _players) => {
      
      dispatch({type: GET_PLAYERS, _players});
      
-     return {
-      type: LOAD_DATA,
-      _players
-    };
+  
     } catch {
       dispatch({type: LOAD_DATA_ERROR});
     }
@@ -149,7 +141,16 @@ export const loadData = (weather, fiveDayData, _players) => {
     } catch {
       dispatch({type: LOAD_DATA_ERROR});
     }
+  
+  return {
+    type: LOAD_DATA,
+    weather,
+    fiveDayData,
+    _players,
+    
+
   };
+  }
 };
 // export const loadEightTimesData = (oneDayWeatherData) => {
 //   const eightTimesData = oneDayWeatherData.map((item) => {
