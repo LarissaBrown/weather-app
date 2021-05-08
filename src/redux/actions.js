@@ -27,22 +27,11 @@ export const getWeatherAction = (weather) => {
     payload: weather,
   }
 }
-export const getWeather = () => {
-  return async (dispatch) => {
-
-  
-  let res = await axios.get(
-    "http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40"
-  );
-  let weather = res.data.list;
-  console.log("weather results", weather)
-  return dispatch(getWeatherAction(weather))
-  }
-};
-
 
 export const fetchFiveDayData = (weather) => {
-  const fiveDayData = weather.map((item, index) => {
+  let dataArray = []
+  weather.map((item, index) => {
+   
     //first item
     const currentDate = item.dt_txt.split(" ")[0];
     //next item
@@ -53,16 +42,39 @@ export const fetchFiveDayData = (weather) => {
     //  console.log(weather[index + 1].dt_txt.split(' ')[0])
     //  console.log(item.dt_txt.split(' ')[0])
 
-    if (fiveDayData.length <= 4 && currentDate !== nextDate) {
-      return item 
+    if (dataArray.length <= 4 && currentDate !== nextDate) {
+      dataArray.push(item)
+      return item
     } 
-    console.log("fiveDayData", fiveDayData)
+   
+    
+   
     return {
       type: FETCH_FIVE_DAY_DATA,
-      fiveDayData: fiveDayData,
+      fiveDayData: dataArray,
     };
   });
 };
+
+export const getWeather = () => {
+  return async (dispatch) => {
+
+  
+  let res = await axios.get(
+    "http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40"
+  );
+  let weather = res.data.list;
+  console.log("weather results", weather)
+
+  dispatch(fetchFiveDayData(weather))
+ 
+  // dispatch(getPlayers(fiveDayData))
+  return dispatch(getWeatherAction(weather))
+  }
+};
+
+
+
 
 export const getPlayers = (fiveDayData) => {
   return async (dispatch) => {
