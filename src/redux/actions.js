@@ -9,6 +9,7 @@ import {
   LOAD_DATA_ERROR,
   LOAD_DATA_SUCCESS,
   IS_CHECKED_TEMP_TOGGLE,
+  GET_WEATHER_SUCCESS,
 } from "../constants";
 
 export const isCheckedTempToggle = (isCheckedTemp) => {
@@ -19,18 +20,26 @@ export const isCheckedTempToggle = (isCheckedTemp) => {
     payload: !isCheckedTemp,
   };
 };
+export const getWeatherAction = (weather) => {
+  console.log('Getting Weather', weather)
+  return {
+    type: GET_WEATHER_SUCCESS,
+    payload: weather,
+  }
+}
+export const getWeather = () => {
+  return async (dispatch) => {
 
-export const getWeather = async () => {
+  
   let res = await axios.get(
     "http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40"
   );
   let weather = res.data.list;
   console.log("weather results", weather)
-  return {
-    type: GET_WEATHER,
-    weather: weather,
-  };
+  return dispatch(getWeatherAction(weather))
+  }
 };
+
 
 export const fetchFiveDayData = (weather) => {
   const fiveDayData = weather.map((item, index) => {

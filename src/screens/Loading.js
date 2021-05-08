@@ -13,7 +13,7 @@ import {
   makeSelectLoaded,
   makeSelect_Players,
 } from "../redux/selectors"
-
+import { getWeather } from '../redux/actions'
 
 
 
@@ -28,10 +28,16 @@ function Loading() {
   const loaded = makeSelectLoaded(state => state.loaded)
 
   const dispatch = useDispatch()
+  console.log('Loaded', loaded())
  
+
   useEffect(() => {
-   
-    !loaded && dispatch(loadData(weather, loaded, fiveDayData, _players));
+    
+    // !loaded() && dispatch(loadData(weather, loaded, fiveDayData, _players));
+    if(!loaded()) {
+      dispatch(getWeather())
+    }
+  
       
     
       

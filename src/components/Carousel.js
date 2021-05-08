@@ -27,7 +27,7 @@ const Carousel = () => {
 useEffect(() => {
 
  dispatch(loadData(_players, weather, fiveDayData))
- console.log(_players)
+//  console.log(_players)
 
 }, [_players, dispatch, weather, fiveDayData])
 
@@ -36,7 +36,7 @@ useEffect(() => {
 
 
   const length = _players.length;
-  _players.push([..._players]);
+  // _players.push([..._players]);
 
   const sleep = (ms = 0) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
