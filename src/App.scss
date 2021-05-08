@@ -1,0 +1,343 @@
+
+$slide-count: 3;
+$slide-width: 30rem;
+
+html {
+  box-sizing: border-box;
+  width: 100vw;
+  font-size: 10px;
+  z-index: 0;
+  @media (max-width: 425px) {
+    font-size: 8px;
+  }
+}
+
+body {
+    background-image: url("./screens/ibrahim-mohamed-k6WXcWZMd-k-unsplash.jpg");
+    display:flex;
+    padding: 100px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 0;
+    font-size: 1.5rem;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+
+  }
+//   .theme-button{
+      
+//   }
+  
+  .App {
+    position: relative;
+    display: flex;
+    height: auto; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-wrap:normal;
+    text-align: center;
+    background-color: rgba(245, 245, 245, 0.404);
+    z-index: 0
+    
+  }
+  
+  .App-spin {
+    height: 50vmin;
+    pointer-events: none;
+  }
+  
+  .radio{
+    width: 100%;
+    display: flex;
+    position: relative;
+    padding-bottom: 2%;
+    color: white;
+    justify-content: center;
+   
+  }
+  
+  audio {
+    padding: 10px;
+    margin-left: 6%;
+  
+  }
+  
+  .bargraph {
+    position: relative;
+    display: flex; 
+    flex-direction: row;
+    justify-content: center;
+    width: 80%;
+    height: 300px;
+    background-color:rgba(66, 90, 110, 0.322);
+    padding: 50px
+  
+  }
+  
+  .bar-container{
+    position: relative;
+    width: 10%;
+    margin: 5px;
+  }
+  .bar {
+  position: absolute;
+  bottom:0;
+  width: 100%;
+  background-color: rgb(238, 211, 215)
+  }
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  box-sizing: inherit;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.carousel__wrap {
+    margin-top: 10%;
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+.carousel__inner {
+    height: auto;
+    position: relative;
+    width: calc(#{$slide-width * 3});
+}
+
+.carousel__container {
+    height: 30vh;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.carousel__slide-list {
+    height: 100vh;
+    // left: 50%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    transform: translateX(-50%);
+    width: calc(#{($slide-count + 0.5) * $slide-width * 3});
+}
+// @mixin card($depth) {
+//     @if $depth < 1 {
+//       box-shadow: none;
+//     } @else if $depth > 5 {
+//       @warn "Invalid $depth `#{$depth}` for mixin `card`.";
+//     } @else {
+//       box-shadow: bottom-shadow($depth), top-shadow($depth);  
+//     }
+//   }
+
+//   @function top-shadow($depth) {
+//     $primary-offset: nth(1.5 3 10 14 19, $depth) * 1px;
+//     $blur: nth(1.5 3 10 14 19, $depth) * 4px;
+//     $color: rgba(black, nth(.12 .16 .19 .25 .30, $depth));
+  
+//     @return 0 $primary-offset $blur $color;
+//   }
+  
+  
+//   @function bottom-shadow($depth) {
+//     $primary-offset: nth(1.5 3 6 10 15, $depth) * 1px;
+//     $blur: nth(1 3 3 5 6, $depth) * 4px;
+//     $color: rgba(black, nth(.24 .23 .23 .22 .22, $depth));
+  
+//     @return 0 $primary-offset $blur $color;
+//   }
+
+ 
+  
+  li {
+    height: $slide-width;
+    width: $slide-width;
+    margin: 1em;
+    line-height: 10em;
+    border: 1px solid rgba(black, .2);
+    text-align: center;
+    float: left;
+  }
+  
+  // @for $i from 2 through 6 {
+  //   li:nth-of-type(#{$i}) {
+  //     @include card($i - 1);
+  //   }
+  // }
+.carousel__slide-item {
+    display: inline-block;
+    height: $slide-width;
+    margin:0;
+    position: absolute;
+    transition: all 0.3s;
+    width: $slide-width;
+    background-color: whitesmoke;
+  
+   
+}
+
+.carousel__slide-item-img-link {
+    cursor: zoom-in;
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    img {
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.5s ease;
+        width: 100%;
+    }
+
+    &::after {
+        align-items: center;
+        background: rgba(black, 0.5);
+        color: white;
+        content: 'view data';
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        opacity: 0;
+        position: absolute;
+        transition: all 0.5s ease;
+        width: 100%;
+    }
+
+    &:hover {
+        &::after {
+            opacity: 1;
+        }
+
+        img {
+            transform: scale(1.3);
+        }
+    }
+}
+
+.carousel-slide-item__body {
+    bottom: -2.5rem;
+    height: 10%;
+    position: absolute;
+
+    h4 {
+        margin: 0.7rem 0 0;
+        text-transform: uppercase;
+    }
+
+    p {
+        font-size: 1.2rem;
+        line-height: 1.3;
+        margin: 0.7rem 0 0;
+    }
+}
+
+.carousel__btn {
+    align-items: center;
+    background: 0;
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: -30px;
+ 
+    transform: translateY(-50%);
+
+    &--prev {
+        
+        visibility: visible
+    }
+
+    &--next {
+        right: -5rem;
+        visibility: visible
+    }
+}
+
+.hidden-arrow {
+  align-items: center;
+  background: 0;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: -30px;
+
+  transform: translateY(-50%);
+
+  &--prev {
+    left: -5rem;
+    visibility: hidden
+}
+
+&--next {
+    right: -5rem;
+    visibility: hidden
+}
+ 
+}
+
+.carousel__btn-arrow {
+    border: solid rgb(34, 15, 15);
+    border-width: 0 1rem 1rem 0;
+    height: 3rem;
+    padding: 3px;
+    width: 3rem;
+    z-index: 20;
+
+    &--left {
+        transform: rotate(135deg);
+    }
+
+    &--right {
+        transform: rotate(-45deg);
+    }
+}
+
+.carousel__dots {
+    display: inline-block;
+    left: 50%;
+    margin-top: 5%;
+    position: absolute;
+    transform: translateX(-50%);
+
+    .dot {
+        background: #ccc;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        height: 2rem;
+        margin: 0 0.3rem;
+        outline: none;
+        transform: scale(0.5);
+        width: 2rem;
+
+        &.active {
+            background: rgb(18, 48, 75);
+        }
+    }
+}
