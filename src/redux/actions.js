@@ -21,7 +21,7 @@ export const isCheckedTempToggle = (isCheckedTemp) => {
   };
 };
 export const getWeatherAction = (weather) => {
-  console.log('Getting Weather', weather)
+  
   return {
     type: GET_WEATHER_SUCCESS,
     payload: weather,
@@ -35,6 +35,7 @@ export const getWeather = () => {
     "http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40"
   );
   let weather = res.data.list;
+  dispatch(fetchFiveDayData(weather))
   console.log("weather results", weather)
   return dispatch(getWeatherAction(weather))
   }
@@ -42,26 +43,41 @@ export const getWeather = () => {
 
 
 export const fetchFiveDayData = (weather) => {
-  const fiveDayData = weather.map((item, index) => {
-    //first item
-    const currentDate = item.dt_txt.split(" ")[0];
-    //next item
-    let nextDate;
-    if (weather[index + 1] <= weather[weather.length]) {
-      nextDate = weather[index + 1].dt_txt.split(" ")[0];
-    }
+  // const fiveDayData = weather.map((item, index) => {
+    // first item
+    // const currentDate = item.dt_txt.split(" ")[0];
+    // next item
+    // let nextDate;
+    // if (weather[index + 1] <= weather[weather.length]) {
+      // nextDate = weather[index + 1].dt_txt.split(" ")[0];
+    // }
     //  console.log(weather[index + 1].dt_txt.split(' ')[0])
     //  console.log(item.dt_txt.split(' ')[0])
 
-    if (fiveDayData.length <= 4 && currentDate !== nextDate) {
-      return item 
-    } 
-    console.log("fiveDayData", fiveDayData)
-    return {
-      type: FETCH_FIVE_DAY_DATA,
-      fiveDayData: fiveDayData,
-    };
-  });
+    // if (index <= 4 && currentDate !== nextDate) {
+      // return item 
+    // } 
+  //  
+  // });
+  const fiveDayData = []
+  weather.forEach((item, index) => {
+    const currentDate = item.dt_txt.split(" ")[0]
+    if(fiveDayData.length < 5) {
+      fiveDayData.push(item)
+    }
+    
+  })
+  
+  
+  
+  
+  
+  
+  console.log('fiveDayData', fiveDayData)
+  return {
+    type: FETCH_FIVE_DAY_DATA,
+    fiveDayData: fiveDayData,
+  }
 };
 
 export const getPlayers = (fiveDayData) => {

@@ -32,7 +32,7 @@ export const initialState = {
 
 /* eslint-disable default-case, no-param-reassign */
 const globalReducer = (state = initialState, action) =>{
-  console.log('ACTION::::', action)
+  // console.log('ACTION::::', action)
   switch(action.type) {
     case GET_WEATHER_SUCCESS:
       return {...state,
