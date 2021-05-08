@@ -8,10 +8,10 @@ import Grid from "@material-ui/core/Grid";
 import { useDispatch } from 'react-redux';
 import { loadData } from '../redux/actions'
 import {
-  makeSelectWeather,
-  makeSelectFiveDayData,
-  makeSelectLoaded,
-  makeSelect_Players,
+  makeSelectCurrentWeather,
+  // makeSelectFiveDayData,
+  // makeSelectLoaded,
+  // makeSelect_Players,
 } from "../redux/selectors"
 
 
@@ -21,21 +21,20 @@ import {
 
 
 function Loading() {
-  
-  const weather = makeSelectWeather(state => state.weather)
-  const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
-  const _players = makeSelect_Players(state => state._players)
-  const loaded = makeSelectLoaded(state => state.loaded)
+
+  const {weather, fiveDayData, _players, error, loaded} =  makeSelectCurrentWeather
+ 
+
 
   const dispatch = useDispatch()
  
   useEffect(() => {
    
-    !loaded && dispatch(loadData(weather, loaded, fiveDayData, _players));
+    !loaded && dispatch(loadData(weather, loaded, fiveDayData, _players, error));
       
     
       
-  }, [loaded, weather, fiveDayData, _players, dispatch]);
+  }, [loaded, weather, fiveDayData, _players, error, dispatch]);
 
 
  

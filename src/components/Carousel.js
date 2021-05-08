@@ -17,9 +17,9 @@ const Carousel = () => {
 
   const slideWidth = 30;
 
-  const weather = makeSelectCurrentWeather(state => state.weather)
-  const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
-  const _players = makeSelect_Players(state => state._players)
+  const weather = makeSelectCurrentWeather
+  const fiveDayData = makeSelectFiveDayData
+  const {_players} = makeSelect_Players
  
   const dispatch = useDispatch()
 
@@ -32,7 +32,7 @@ useEffect(() => {
 }, [_players, dispatch, weather, fiveDayData])
 
 
-  
+  console.log("players", _players)
 
 
   const length = _players.length;

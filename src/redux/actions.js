@@ -11,6 +11,9 @@ import {
   IS_CHECKED_TEMP_TOGGLE,
 } from "../constants";
 
+
+
+
 export const isCheckedTempToggle = (isCheckedTemp) => {
 
   console.log("isCheckedTemp", isCheckedTemp)
@@ -59,7 +62,7 @@ export const getPlayers = (fiveDayData) => {
   return async (dispatch) => {
     
   try{ 
-   const results = fiveDayData.map((_player) => {
+   const _players = fiveDayData.map((_player) => {
     let key = v4();
     let celcius = Math.floor(_player.main.temp - 273.15);
     let fahrenheit = Math.floor(((_player.main.temp - 273.15) * 9) / 5 + 32);
@@ -79,10 +82,10 @@ export const getPlayers = (fiveDayData) => {
     };
   })
 
-  console.log("_players results", results)
+  console.log("_players results", _players)
   return {
     type: GET_PLAYERS,
-    _players: results,
+    _players: _players,
   };
 } catch {
   dispatch({type: LOAD_DATA_ERROR})
@@ -105,53 +108,54 @@ export function loadingError(error) {
   };
 }
 
-export const loadData = (weather, fiveDayData, _players) => {
+export const loadData = () => {
   // console.log(weather, loaded, fiveDayData, _players, error);
   return async (dispatch) => {
     try {
-      dispatch({type: GET_WEATHER, weather: weather});
+      dispatch(getWeather(weather));
       
-     
+      return {
+        type: LOAD_DATA,
+        weather: weather,
+      };
     } catch {
-      dispatch({type: LOAD_DATA_ERROR});
+      dispatch(loadingError(error));
     }
     try {
       // console.log(weather, loaded, fiveDayData, _players, error);
      
-     dispatch({type: FETCH_FIVE_DAY_DATA, fiveDayData});
+     dispatch(fetchFiveDayData(fiveDayData));
      
-   
-    
+     return {
+      type: LOAD_DATA,
+      fiveDayData,
+    };
     } catch {
-      dispatch({type: LOAD_DATA_ERROR});
+      dispatch(loadingError(error));
     }
     try {
       // console.log(weather, loaded, fiveDayData, _players, error);
      
-     dispatch({type: GET_PLAYERS, _players});
+     dispatch(getPlayers(_players));
      
-  
+     return {
+      type: LOAD_DATA,
+      _players
+    };
     } catch {
-      dispatch({type: LOAD_DATA_ERROR});
+      dispatch(loadingError(error));
     }
     try {
       // console.log(weather, loaded, fiveDayData, _players, error);
-      dispatch({type: LOAD_DATA_SUCCESS, loaded: true});
+      dispatch(loaded({loaded:true}));
 
     } catch {
-      dispatch({type: LOAD_DATA_ERROR});
+      dispatch(loadingError(error));
     }
-  
-  return {
-    type: LOAD_DATA,
-    weather,
-    fiveDayData,
-    _players,
-    
-
   };
-  }
 };
+
+
 // export const loadEightTimesData = (oneDayWeatherData) => {
 //   const eightTimesData = oneDayWeatherData.map((item) => {
 //     if (eightTimesData === []) {
