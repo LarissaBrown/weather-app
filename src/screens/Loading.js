@@ -6,12 +6,12 @@ import { connect } from 'react-redux'
 import Carousel from "../components/Carousel";
 import Grid from "@material-ui/core/Grid";
 import { useDispatch } from 'react-redux';
-import { loadData } from '../redux/actions'
+
 import {
-  makeSelectWeather,
-  makeSelectFiveDayData,
+  // makeSelectWeather,
+  // makeSelectFiveDayData,
   makeSelectLoaded,
-  makeSelect_Players,
+  // makeSelect_Players,
 } from "../redux/selectors"
 import { getWeather } from '../redux/actions'
 
@@ -22,18 +22,18 @@ import { getWeather } from '../redux/actions'
 
 function Loading() {
   
-  const weather = makeSelectWeather(state => state.weather)
-  const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
-  const _players = makeSelect_Players(state => state._players)
+  // const weather = useSelector(state => state.weather)
+  // // const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
+  // // const _players = makeSelect_Players(state => state._players)
   const loaded = makeSelectLoaded(state => state.loaded)
 
   const dispatch = useDispatch()
-  console.log('Loaded', loaded())
+  // console.log('Loaded', loaded())
  
 
   useEffect(() => {
     
-    // !loaded() && dispatch(loadData(weather, loaded, fiveDayData, _players));
+  
     if(!loaded()) {
       dispatch(getWeather())
     }
@@ -41,7 +41,7 @@ function Loading() {
       
     
       
-  }, [loaded, weather, fiveDayData, _players, dispatch]);
+  }, [loaded, dispatch]);
 
 
  
@@ -92,7 +92,7 @@ function Loading() {
 const mapStateToProps = function(state) {
   
   return {
-    loading: state.loading,
+    loaded: state.loaded,
 
   }
 }

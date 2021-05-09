@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 // import { getItemsByVisibilityFilter , getItems} from "../redux/reducers/selectors";
 // import { VISIBILITY_FILTERS } from "../constants";
 import { useDispatch } from "react-redux";
-import { loadData } from "../redux/actions";
+import { getWeather } from "../redux/actions";
 import {
-  makeSelectCurrentWeather,
-  makeSelectFiveDayData,
+  // makeSelectCurrentWeather,
+  // makeSelectFiveDayData,
   makeSelect_Players,
 } from "../redux/selectors"
 
@@ -17,8 +17,8 @@ const Carousel = () => {
 
   const slideWidth = 30;
 
-  const weather = makeSelectCurrentWeather(state => state.weather)
-  const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
+  // const weather = makeSelectCurrentWeather(state => state.weather)
+  // const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
   const _players = makeSelect_Players(state => state._players)
  
   const dispatch = useDispatch()
@@ -26,10 +26,10 @@ const Carousel = () => {
 
 useEffect(() => {
 
- dispatch(loadData(_players, weather, fiveDayData))
+ dispatch(getWeather())
 //  console.log(_players)
 
-}, [_players, dispatch, weather, fiveDayData])
+}, [dispatch])
 
 
   

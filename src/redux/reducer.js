@@ -7,13 +7,13 @@
  *
  */
 
-import produce from "immer";
+// import produce from "immer";
 import {
   LOAD_DATA_SUCCESS,
-  LOAD_DATA,
-  LOAD_DATA_ERROR,
-  IS_CHECKED_TEMP_TOGGLE,
-  GET_WEATHER,
+  // LOAD_DATA,
+  // LOAD_DATA_ERROR,
+  // IS_CHECKED_TEMP_TOGGLE,
+  // GET_WEATHER,
   GET_WEATHER_SUCCESS,
   GET_PLAYERS,
   FETCH_FIVE_DAY_DATA,
@@ -32,7 +32,7 @@ export const initialState = {
 
 /* eslint-disable default-case, no-param-reassign */
 const globalReducer = (state = initialState, action) =>{
-  console.log('ACTION::::', action)
+  // console.log('ACTION::::', action)
   switch(action.type) {
     case GET_WEATHER_SUCCESS:
       return {...state,
@@ -42,6 +42,10 @@ const globalReducer = (state = initialState, action) =>{
       return {...state,
       fiveDayData: [...state.fiveDayData, action.payload]
       }
+    case GET_PLAYERS:
+      return {...state,
+      _players: [...state._players, action.payload]
+    }
     case LOAD_DATA_SUCCESS:
       return {...state,
       loaded: !state.loaded
