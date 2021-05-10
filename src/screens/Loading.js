@@ -2,17 +2,13 @@ import React, { useEffect } from "react";
 import spin from "./spin.svg";
 import WeatherInfo from "./WeatherInfo";
 // import Bargraph from "../components/Bargraph";
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import Carousel from "../components/Carousel";
 import Grid from "@material-ui/core/Grid";
-import { useDispatch } from 'react-redux';
-import { loadData } from '../redux/actions'
-import {
-  makeSelectCurrentWeather,
-  // makeSelectFiveDayData,
-  // makeSelectLoaded,
-  // makeSelect_Players,
-} from "../redux/selectors"
+
+import { useDispatch, useSelector } from 'react-redux';
+import { getWeather , loadDataSuccess } from '../redux/actions'
+
 
 
 
@@ -22,19 +18,24 @@ import {
 
 function Loading() {
 
-  const {weather, fiveDayData, _players, error, loaded} =  makeSelectCurrentWeather
- 
 
 
+  const  _players  = useSelector(state => state._players)
+  const weather = useSelector(state => state.weather)
+  const fiveDayData = useSelector(state => state.fiveDayData)
+  const loaded = useSelector(state => state.loaded)
   const dispatch = useDispatch()
- 
-  useEffect(() => {
-   
-    !loaded && dispatch(loadData(weather, loaded, fiveDayData, _players, error));
-      
-    
-      
-  }, [loaded, weather, fiveDayData, _players, error, dispatch]);
+
+
+
+useEffect(() => {
+
+ !loadDataSuccess() && dispatch(getWeather(weather, fiveDayData, _players))
+ console.log(_players)
+
+}, [dispatch, _players, weather, fiveDayData])
+
+
 
 
  
@@ -82,39 +83,15 @@ function Loading() {
   );
 }
 
-const mapStateToProps = function(state) {
+export default Loading
+
+// const mapStateToProps = function(state) {
   
-  return {
-    loading: state.loading,
+//   return {
+//     loaded: state.loaded,
 
-  }
-}
-export default connect(mapStateToProps)
-  (Loading)
-
-// const weather = selectGlobal(state => state.weather)
-// // const _localItems = selectGlobal(state => state._localItems)
-// const loaded = selectGlobal(state => state.isLoaded)
-// const fiveDayData = selectGlobal(state => state.fiveDayData)
-// const eightTimes = selectGlobal(state => state.eightTimesData)
-
-// const dispatch = useDispatch()
-
-// useEffect(() => {
-
-//     if(weather && fiveDayData){
-//         dispatch(fetchWeather())
-//         return
-//     }
-
-//     if(weather !== []){
-//         dispatch(isLoaded())
-//         dispatch(getPlayers())
-//         dispatch(eightTimesData())
-//         return
-//     }
-
-// }, [dispatch, fiveDayData, weather]
-// )
-
+//   }
+// }
+// export default connect(mapStateToProps)
+//   (Loading)
 

@@ -9,7 +9,7 @@ import * as serviceWorker from './serviceWorker';
 
 
 const rootElement =  document.getElementById('root')
-console.log('Initial State Index: ', store.getState(global))
+console.log('Initial State Index: ', store.getState())
 
 ReactDOM.render(
   <React.StrictMode>

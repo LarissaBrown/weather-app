@@ -1,16 +1,17 @@
 import axios from "axios";
 import { v4 } from "uuid";
 
+
 import {
-  LOAD_DATA,
+  // LOAD_DATA,
   FETCH_FIVE_DAY_DATA,
   GET_PLAYERS,
-  GET_WEATHER,
+  // GET_WEATHER,
   LOAD_DATA_ERROR,
   LOAD_DATA_SUCCESS,
   IS_CHECKED_TEMP_TOGGLE,
+  GET_WEATHER_SUCCESS,
 } from "../constants";
-
 
 
 
@@ -22,47 +23,76 @@ export const isCheckedTempToggle = (isCheckedTemp) => {
     payload: !isCheckedTemp,
   };
 };
+export const getWeatherAction = (_players) => {
+  
+  return {
+    type: GET_WEATHER_SUCCESS,
+    payload: _players,
+  }
+}
 
-export const getWeather = async () => {
+
+
+
+export const getWeather = () => {
+
+  return async (dispatch) => {
+
   let res = await axios.get(
     "http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40"
   );
   let weather = res.data.list;
-  console.log("weather results", weather)
+  dispatch(fetchFiveDayData(weather))
+  let fiveDayData = fetchFiveDayData.payload
+  dispatch(getPlayers(fiveDayData))
+  let _players = getPlayers.payload
+  dispatch(getWeatherAction(_players))
+
   return {
-    type: GET_WEATHER,
-    weather: weather,
-  };
+    type: GET_WEATHER_SUCCESS,
+    payload: _players,
+  }
+  }
+
 };
+
 
 export const fetchFiveDayData = (weather) => {
-  const fiveDayData = weather.map((item, index) => {
-    //first item
-    const currentDate = item.dt_txt.split(" ")[0];
-    //next item
-    let nextDate;
-    if (weather[index + 1] <= weather[weather.length]) {
-      nextDate = weather[index + 1].dt_txt.split(" ")[0];
-    }
-    //  console.log(weather[index + 1].dt_txt.split(' ')[0])
-    //  console.log(item.dt_txt.split(' ')[0])
+  const arr = weather
+  console.log("arr", arr)
+  const fiveDayData = []
+                                                                                
+  weather.forEach((item, index) => {
+   
+    if(arr[index+1] !== undefined ){
+    const currentDate = item.dt_txt.split(" ")[0]
+    const nextDate = arr[index+1].dt_txt.split(" ")[0];
+  
+    if(fiveDayData.length <= 5) {
 
-    if (fiveDayData.length <= 4 && currentDate !== nextDate) {
-      return item 
-    } 
-    console.log("fiveDayData", fiveDayData)
-    return {
-      type: FETCH_FIVE_DAY_DATA,
-      fiveDayData: fiveDayData,
-    };
-  });
+
+      currentDate !== nextDate && fiveDayData.push(item)
+    }
+  
+  }
+})
+  console.log('fiveDayData', fiveDayData)
+  
+  return {
+    type: FETCH_FIVE_DAY_DATA,
+    payload: fiveDayData,
+  }
 };
+
 
 export const getPlayers = (fiveDayData) => {
   return async (dispatch) => {
-    
+   let _players = []
   try{ 
-   const _players = fiveDayData.map((_player) => {
+
+  fiveDayData.map((_player) => {
+
+    
     let key = v4();
     let celcius = Math.floor(_player.main.temp - 273.15);
     let fahrenheit = Math.floor(((_player.main.temp - 273.15) * 9) / 5 + 32);
@@ -70,7 +100,7 @@ export const getPlayers = (fiveDayData) => {
     let desc = _player.weather[0].main;
     // let image = require(`"./reducers/assets/${_player.weather[0].main}_Munich.jpg"`)
 
-    return {
+   return  _players.push( {
       player: {
         key: key,
         celcius: celcius,
@@ -79,13 +109,17 @@ export const getPlayers = (fiveDayData) => {
         desc: desc,
         // image: image
       },
-    };
+    })
+   
   })
 
   console.log("_players results", _players)
+
+  
   return {
     type: GET_PLAYERS,
-    _players: _players,
+    payload: _players,
+
   };
 } catch {
   dispatch({type: LOAD_DATA_ERROR})
@@ -93,11 +127,11 @@ export const getPlayers = (fiveDayData) => {
 };
 }
 
-export function loaded(_players) {
-  console.log("loaded", loaded)
+export function loadDataSuccess(_players) {
+  
   return {
     type: LOAD_DATA_SUCCESS,
-    loaded: false,
+    payload: false,
   };
 }
 
@@ -108,54 +142,53 @@ export function loadingError(error) {
   };
 }
 
-export const loadData = () => {
-  // console.log(weather, loaded, fiveDayData, _players, error);
-  return async (dispatch) => {
-    try {
-      dispatch(getWeather(weather));
+// export const loadData = (weather, fiveDayData, _players) => {
+//   // console.log(weather, loaded, fiveDayData, _players, error);
+//   return async (dispatch) => {
+//     try {
+//       dispatch({type: GET_WEATHER, weather: weather});
       
-      return {
-        type: LOAD_DATA,
-        weather: weather,
-      };
-    } catch {
-      dispatch(loadingError(error));
-    }
-    try {
-      // console.log(weather, loaded, fiveDayData, _players, error);
      
-     dispatch(fetchFiveDayData(fiveDayData));
+//     } catch {
+//       dispatch({type: LOAD_DATA_ERROR});
+//     }
+//     try {
+//       // console.log(weather, loaded, fiveDayData, _players, error);
      
-     return {
-      type: LOAD_DATA,
-      fiveDayData,
-    };
-    } catch {
-      dispatch(loadingError(error));
-    }
-    try {
-      // console.log(weather, loaded, fiveDayData, _players, error);
+//      dispatch({type: FETCH_FIVE_DAY_DATA, fiveDayData});
      
-     dispatch(getPlayers(_players));
+   
+    
+//     } catch {
+//       dispatch({type: LOAD_DATA_ERROR});
+//     }
+//     try {
+//       // console.log(weather, loaded, fiveDayData, _players, error);
      
-     return {
-      type: LOAD_DATA,
-      _players
-    };
-    } catch {
-      dispatch(loadingError(error));
-    }
-    try {
-      // console.log(weather, loaded, fiveDayData, _players, error);
-      dispatch(loaded({loaded:true}));
+//      dispatch({type: GET_PLAYERS, _players});
+     
+  
+//     } catch {
+//       dispatch({type: LOAD_DATA_ERROR});
+//     }
+//     try {
+//       // console.log(weather, loaded, fiveDayData, _players, error);
+//       dispatch({type: LOAD_DATA_SUCCESS, loaded: true});
 
-    } catch {
-      dispatch(loadingError(error));
-    }
-  };
-};
+//     } catch {
+//       dispatch({type: LOAD_DATA_ERROR});
+//     }
+  
+//   return {
+//     type: LOAD_DATA,
+//     weather,
+//     fiveDayData,
+//     _players,
+    
 
-
+//   };
+//   }
+// };
 // export const loadEightTimesData = (oneDayWeatherData) => {
 //   const eightTimesData = oneDayWeatherData.map((item) => {
 //     if (eightTimesData === []) {
