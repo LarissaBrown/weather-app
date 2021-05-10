@@ -7,7 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
  import { combineReducers } from 'redux';
 
- import globalReducer from '../redux/reducer';
+ import reducer from '../redux/reducer';
 
  
  /**
@@ -15,7 +15,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
   */
 
    const rootReducer = combineReducers({
-     global: globalReducer,
+     reducer: reducer,
      
    });
  

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { v4 } from "uuid";
 
+
 import {
   // LOAD_DATA,
   FETCH_FIVE_DAY_DATA,
@@ -11,6 +12,8 @@ import {
   IS_CHECKED_TEMP_TOGGLE,
   GET_WEATHER_SUCCESS,
 } from "../constants";
+
+
 
 export const isCheckedTempToggle = (isCheckedTemp) => {
 
@@ -29,20 +32,28 @@ export const getWeatherAction = (_players) => {
 }
 
 
-export const getWeather = (fiveDayData, _players, weather) => {
+
+
+export const getWeather = () => {
+
   return async (dispatch) => {
 
-  
   let res = await axios.get(
     "http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40"
   );
   let weather = res.data.list;
   dispatch(fetchFiveDayData(weather))
-  console.log("weather results", weather)
+  let fiveDayData = fetchFiveDayData.payload
   dispatch(getPlayers(fiveDayData))
-  console.log("fiveDayData", fiveDayData)
-  return dispatch(getWeatherAction(_players))
+  let _players = getPlayers.payload
+  dispatch(getWeatherAction(_players))
+
+  return {
+    type: GET_WEATHER_SUCCESS,
+    payload: _players,
   }
+  }
+
 };
 
 
@@ -50,9 +61,7 @@ export const fetchFiveDayData = (weather) => {
   const arr = weather
   console.log("arr", arr)
   const fiveDayData = []
-  
-  
-
+                                                                                
   weather.forEach((item, index) => {
    
     if(arr[index+1] !== undefined ){
@@ -71,15 +80,16 @@ export const fetchFiveDayData = (weather) => {
   
   return {
     type: FETCH_FIVE_DAY_DATA,
-    fiveDayData: fiveDayData,
+    payload: fiveDayData,
   }
 };
 
+
 export const getPlayers = (fiveDayData) => {
   return async (dispatch) => {
-    
+   let _players = []
   try{ 
-   const _players = fiveDayData.map((_player) => {
+  fiveDayData.map((_player) => {
     let key = v4();
     let celcius = Math.floor(_player.main.temp - 273.15);
     let fahrenheit = Math.floor(((_player.main.temp - 273.15) * 9) / 5 + 32);
@@ -87,7 +97,7 @@ export const getPlayers = (fiveDayData) => {
     let desc = _player.weather[0].main;
     // let image = require(`"./reducers/assets/${_player.weather[0].main}_Munich.jpg"`)
 
-    return {
+   return  _players.push( {
       player: {
         key: key,
         celcius: celcius,
@@ -96,13 +106,15 @@ export const getPlayers = (fiveDayData) => {
         desc: desc,
         // image: image
       },
-    };
+    })
+   
   })
 
   console.log("_players results", _players)
+  
   return {
     type: GET_PLAYERS,
-    _players: _players,
+    payload: _players,
   };
 } catch {
   dispatch({type: LOAD_DATA_ERROR})
@@ -110,11 +122,11 @@ export const getPlayers = (fiveDayData) => {
 };
 }
 
-export function loaded(_players) {
-  console.log("loaded", loaded)
+export function loadDataSuccess(_players) {
+  
   return {
     type: LOAD_DATA_SUCCESS,
-    loaded: false,
+    payload: false,
   };
 }
 

@@ -1,42 +1,29 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import CarouselSlideItem from "./CarouselSlideItem";
-import { connect } from "react-redux";
-// import { getItemsByVisibilityFilter , getItems} from "../redux/reducers/selectors";
-// import { VISIBILITY_FILTERS } from "../constants";
-import { useDispatch } from "react-redux";
-import { getWeather } from "../redux/actions";
-import {
-  // makeSelectCurrentWeather,
-  // makeSelectFiveDayData,
-  makeSelect_Players,
-} from "../redux/selectors"
+// import { connect } from "react-redux";
+import {  useSelector } from "react-redux";
+// import { getWeather, loaded } from "../redux/actions";
+// import  reducer from "../redux/reducer"
 
 
 
 const Carousel = () => {
 
   const slideWidth = 30;
-
-  // const weather = makeSelectCurrentWeather(state => state.weather)
-  // const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
-  const _players = makeSelect_Players(state => state._players)
  
-  const dispatch = useDispatch()
+  const _players = useSelector(state => state._players)
+
+ console.log(_players)
 
 
-useEffect(() => {
-
- dispatch(getWeather())
-//  console.log(_players)
-
-}, [dispatch])
 
 
   
 
 
   const length = _players.length;
-  // _players.push([..._players]);
+  console.log(_players)
+   _players.push([..._players]);
 
   const sleep = (ms = 0) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -69,9 +56,9 @@ useEffect(() => {
 
   const keys = Array.from(Array(_players.length).keys());
 
-  const [localItems, setlocalItems] = React.useState(keys);
-  const [isTicking, setIsTicking] = React.useState(false);
-  const [activeIdx, setActiveIdx] = React.useState(0);
+  const [localItems, setlocalItems] = useState(keys);
+  const [isTicking, setIsTicking] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
   const bigLength = localItems.length;
 
   const prevClick = (jump = 1) => {
@@ -164,17 +151,17 @@ useEffect(() => {
     </div>
   );
 };
-
-const mapStateToProps = function(state) {
+export default Carousel
+// const mapStateToProps = function(state) {
  
-  const {weather, loading, fiveDayData, _players} = state
-  return {
-    weather: weather,
-   loading: loading,
-    fiveDayData: fiveDayData,
-    _players: _players
-  }
-}
+//   const {weather, loading, fiveDayData, _players} = state
+//   return {
+//     weather: weather,
+//    loading: loading,
+//     fiveDayData: fiveDayData,
+//     _players: _players
+//   }
+// }
 
-export default connect(mapStateToProps)
-  (Carousel)
+// export default connect(mapStateToProps)
+//   (Carousel)
