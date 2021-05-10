@@ -89,7 +89,10 @@ export const getPlayers = (fiveDayData) => {
   return async (dispatch) => {
    let _players = []
   try{ 
+
   fiveDayData.map((_player) => {
+
+    
     let key = v4();
     let celcius = Math.floor(_player.main.temp - 273.15);
     let fahrenheit = Math.floor(((_player.main.temp - 273.15) * 9) / 5 + 32);
@@ -111,10 +114,12 @@ export const getPlayers = (fiveDayData) => {
   })
 
   console.log("_players results", _players)
+
   
   return {
     type: GET_PLAYERS,
     payload: _players,
+
   };
 } catch {
   dispatch({type: LOAD_DATA_ERROR})

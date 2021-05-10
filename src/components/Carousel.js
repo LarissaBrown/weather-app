@@ -10,6 +10,7 @@ import {  useSelector } from "react-redux";
 const Carousel = () => {
 
   const slideWidth = 30;
+
  
   const _players = useSelector(state => state._players)
 
@@ -18,7 +19,7 @@ const Carousel = () => {
 
 
 
-  
+  console.log("players", _players)
 
 
   const length = _players.length;

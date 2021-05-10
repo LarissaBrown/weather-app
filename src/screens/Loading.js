@@ -5,8 +5,10 @@ import WeatherInfo from "./WeatherInfo";
 // import { connect } from 'react-redux'
 import Carousel from "../components/Carousel";
 import Grid from "@material-ui/core/Grid";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { getWeather , loadDataSuccess } from '../redux/actions'
+
 
 
 
@@ -17,11 +19,13 @@ import { getWeather , loadDataSuccess } from '../redux/actions'
 function Loading() {
 
 
+
   const  _players  = useSelector(state => state._players)
   const weather = useSelector(state => state.weather)
   const fiveDayData = useSelector(state => state.fiveDayData)
   const loaded = useSelector(state => state.loaded)
   const dispatch = useDispatch()
+
 
 
 useEffect(() => {
@@ -30,6 +34,8 @@ useEffect(() => {
  console.log(_players)
 
 }, [dispatch, _players, weather, fiveDayData])
+
+
 
 
  
