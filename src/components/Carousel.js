@@ -6,24 +6,16 @@ import {  useSelector } from "react-redux";
 // import  reducer from "../redux/reducer"
 
 
-
-const Carousel = () => {
+const Carousel = (props) => {
 
   const slideWidth = 30;
 
  
-  const _players = useSelector(state => state._players)
-
- console.log(_players)
-
-
-
-
-  console.log("players", _players)
-
+const _players = useSelector(state => state._players)
+console.log(_players)
 
   const length = _players.length;
-  console.log(_players)
+ 
    _players.push([..._players]);
 
   const sleep = (ms = 0) => {
@@ -153,16 +145,3 @@ const Carousel = () => {
   );
 };
 export default Carousel
-// const mapStateToProps = function(state) {
- 
-//   const {weather, loading, fiveDayData, _players} = state
-//   return {
-//     weather: weather,
-//    loading: loading,
-//     fiveDayData: fiveDayData,
-//     _players: _players
-//   }
-// }
-
-// export default connect(mapStateToProps)
-//   (Carousel)

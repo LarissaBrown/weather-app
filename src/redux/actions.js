@@ -2,15 +2,16 @@ import axios from "axios";
 import { v4 } from "uuid";
 
 
+
 import {
   // LOAD_DATA,
   FETCH_FIVE_DAY_DATA,
   GET_PLAYERS,
-  // GET_WEATHER,
   LOAD_DATA_ERROR,
   LOAD_DATA_SUCCESS,
   IS_CHECKED_TEMP_TOGGLE,
   GET_WEATHER_SUCCESS,
+  GET_WEATHER,
 } from "../constants";
 
 
@@ -23,38 +24,22 @@ export const isCheckedTempToggle = (isCheckedTemp) => {
     payload: !isCheckedTemp,
   };
 };
-export const getWeatherAction = (_players) => {
-  
+export const getWeatherAction = (weather) => {
+
   return {
     type: GET_WEATHER_SUCCESS,
-    payload: _players,
+    payload: weather
   }
 }
 
 
-
-
-export const getWeather = () => {
-
-  return async (dispatch) => {
-
-  let res = await axios.get(
-    "http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40"
-  );
-  let weather = res.data.list;
-  dispatch(fetchFiveDayData(weather))
-  let fiveDayData = fetchFiveDayData.payload
-  dispatch(getPlayers(fiveDayData))
-  let _players = getPlayers.payload
-  dispatch(getWeatherAction(_players))
-
+export function loadingError(error) {
   return {
-    type: GET_WEATHER_SUCCESS,
-    payload: _players,
-  }
-  }
+    type: LOAD_DATA_ERROR,
+    error,
+  };
+}
 
-};
 
 
 export const fetchFiveDayData = (weather) => {
@@ -69,38 +54,39 @@ export const fetchFiveDayData = (weather) => {
     const nextDate = arr[index+1].dt_txt.split(" ")[0];
   
     if(fiveDayData.length <= 5) {
-
-
       currentDate !== nextDate && fiveDayData.push(item)
     }
   
+  }else if(fiveDayData.length === 4){
+  
+    fiveDayData.push(item)
   }
+
 })
   console.log('fiveDayData', fiveDayData)
-  
+ 
   return {
     type: FETCH_FIVE_DAY_DATA,
     payload: fiveDayData,
   }
+  
 };
 
 
 export const getPlayers = (fiveDayData) => {
-  return async (dispatch) => {
-   let _players = []
+
+  let arr = fiveDayData.payload
   try{ 
+  const _players = arr.map(_player => {
 
-  fiveDayData.map((_player) => {
-
-    
-    let key = v4();
-    let celcius = Math.floor(_player.main.temp - 273.15);
-    let fahrenheit = Math.floor(((_player.main.temp - 273.15) * 9) / 5 + 32);
-    let date = _player.dt_txt.split(" ")[0];
-    let desc = _player.weather[0].main;
+    const key = v4();
+    const celcius = Math.floor(_player.main.temp - 273.15);
+    const fahrenheit = Math.floor(((_player.main.temp - 273.15) * 9) / 5 + 32);
+    const date = _player.dt_txt.split(" ")[0];
+    const desc = _player.weather[0].main;
     // let image = require(`"./reducers/assets/${_player.weather[0].main}_Munich.jpg"`)
 
-   return  _players.push( {
+   return   {
       player: {
         key: key,
         celcius: celcius,
@@ -109,7 +95,7 @@ export const getPlayers = (fiveDayData) => {
         desc: desc,
         // image: image
       },
-    })
+    }
    
   })
 
@@ -121,11 +107,47 @@ export const getPlayers = (fiveDayData) => {
     payload: _players,
 
   };
-} catch {
-  dispatch({type: LOAD_DATA_ERROR})
+} catch (error){
+ console.error(error)
 }
 };
-}
+
+
+export const getWeather = () => {
+
+  return async (dispatch) => {
+   
+      let res = await axios.get(
+        "http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40"
+      );
+      const weather = res.data.list
+      console.log("axios", weather)
+      dispatch({
+        type: GET_WEATHER,
+        payload: weather
+      })
+ try{
+   const fiveDayData = fetchFiveDayData(weather)
+  dispatch({
+    type: FETCH_FIVE_DAY_DATA,
+    payload: fiveDayData})
+
+  let _players = getPlayers(fiveDayData)
+    _players = _players.payload
+  dispatch({
+    type: GET_PLAYERS,
+    payload: _players})
+    console.log("getWeather_Players", _players)
+
+ }catch(error){
+  console.error(error)
+ }
+  }
+
+
+  }
+
+
 
 export function loadDataSuccess(_players) {
   
@@ -135,12 +157,7 @@ export function loadDataSuccess(_players) {
   };
 }
 
-export function loadingError(error) {
-  return {
-    type: LOAD_DATA_ERROR,
-    error,
-  };
-}
+
 
 // export const loadData = (weather, fiveDayData, _players) => {
 //   // console.log(weather, loaded, fiveDayData, _players, error);
@@ -224,4 +241,4 @@ export function loadingError(error) {
 //     type: GRAPH_DATE_CLICKED,
 //     payload: { threeHourData },
 //   };
-// }
+// 
