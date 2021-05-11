@@ -132,10 +132,12 @@ export const getWeather = () => {
     type: FETCH_FIVE_DAY_DATA,
     payload: fiveDayData})
 
-  const _players = getPlayers(fiveDayData)
+  let _players = getPlayers(fiveDayData)
+    _players = _players.payload
   dispatch({
     type: GET_PLAYERS,
     payload: _players})
+    console.log("getWeather_Players", _players)
 
  }catch(error){
   console.error(error)

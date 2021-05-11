@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import spin from "./spin.svg";
 import WeatherInfo from "./WeatherInfo";
 // import Bargraph from "../components/Bargraph";
@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../redux/actions'
-import { getWeather } from '../redux/actions'
+// import { getWeather } from '../redux/actions'
 
 const mapStateToProps = function(state) {
   
@@ -33,13 +33,13 @@ const mapDispatchToProps = function (dispatch) {
 
 
 
-function Loading(props) {
+function Loading(props, state) {
 
 
   const dispatch = useDispatch()
-  // const {loaded, _players, weather, getWeather, loadDataSuccess, fiveDayData} = props
-  // console.log(props)
-
+  // const {loaded, _players, weather, getWeather,fiveDayData} = props
+  console.log(props)
+  const [isHidden, setIsHidden] = useState(true)
   const  _players  = useSelector(state => state._players)
   const weather = useSelector(state => state.weather)
   const fiveDayData = useSelector(state => state.fiveDayData)
@@ -49,9 +49,16 @@ function Loading(props) {
 
 useEffect(() => {
 
-!loaded && dispatch(getWeather())
+  if(isHidden) { 
+props.getWeather()
+  }
+  if (
+ _players !== [] ){ 
+    setIsHidden(!isHidden)}
 
-},[dispatch,loaded])
+    console.log(_players)
+
+},[dispatch, props, _players  , isHidden, setIsHidden])
 
 
 
@@ -60,7 +67,7 @@ useEffect(() => {
   return (
     <>
   
-      {loaded
+      {isHidden
       ? 
       (
         <Grid>
