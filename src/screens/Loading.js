@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Carousel from "../components/Carousel";
 import Grid from "@material-ui/core/Grid";
+
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../redux/actions'
 import { getWeather } from '../redux/actions'
@@ -45,11 +46,14 @@ function Loading(props) {
   const loaded = useSelector(state => state.loaded)
 
 
+
 useEffect(() => {
 
 !loaded && dispatch(getWeather())
 
 },[dispatch,loaded])
+
+
 
 
  

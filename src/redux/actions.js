@@ -100,10 +100,12 @@ export const getPlayers = (fiveDayData) => {
   })
 
   console.log("_players results", _players)
+
   
   return {
     type: GET_PLAYERS,
     payload: _players,
+
   };
 } catch (error){
  console.error(error)
