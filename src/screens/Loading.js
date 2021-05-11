@@ -2,41 +2,61 @@ import React, { useEffect } from "react";
 import spin from "./spin.svg";
 import WeatherInfo from "./WeatherInfo";
 // import Bargraph from "../components/Bargraph";
-// import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import Carousel from "../components/Carousel";
 import Grid from "@material-ui/core/Grid";
 import { useDispatch, useSelector } from 'react-redux';
-import { getWeather , loadDataSuccess } from '../redux/actions'
+import * as actionCreators from '../redux/actions'
+import { getWeather } from '../redux/actions'
+
+const mapStateToProps = function(state) {
+  
+  return {
+    loaded: state.loaded,
+    weather: state.weather,
+    fiveDayData: state.fiveDayData,
+    _players: state._players
+
+
+  }
+}
+
+const mapDispatchToProps = function (dispatch) {
+  
+  return bindActionCreators({
+    getWeather: actionCreators.getWeather,
+    loadDataSuccess: actionCreators.loadDataSuccess
+  }, dispatch)
+}
 
 
 
+function Loading(props) {
 
 
-
-
-function Loading() {
-
+  const dispatch = useDispatch()
+  // const {loaded, _players, weather, getWeather, loadDataSuccess, fiveDayData} = props
+  // console.log(props)
 
   const  _players  = useSelector(state => state._players)
   const weather = useSelector(state => state.weather)
   const fiveDayData = useSelector(state => state.fiveDayData)
   const loaded = useSelector(state => state.loaded)
-  const dispatch = useDispatch()
 
 
 useEffect(() => {
 
- !loadDataSuccess() && dispatch(getWeather(weather, fiveDayData, _players))
- console.log(_players)
+!loaded && dispatch(getWeather())
 
-}, [dispatch, _players, weather, fiveDayData])
+},[dispatch,loaded])
 
 
  
   return (
     <>
   
-      {!loaded
+      {loaded
       ? 
       (
         <Grid>
@@ -62,7 +82,7 @@ useEffect(() => {
             <WeatherInfo />
           </Grid>
 
-          <Carousel /> 
+        <Carousel  _players={_players} fiveDayData={fiveDayData} weather={weather}loaded={loaded}/> 
 
           <Grid
             container
@@ -77,15 +97,8 @@ useEffect(() => {
   );
 }
 
-export default Loading
 
-// const mapStateToProps = function(state) {
-  
-//   return {
-//     loaded: state.loaded,
 
-//   }
-// }
-// export default connect(mapStateToProps)
-//   (Loading)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Loading)
 
